@@ -11,7 +11,7 @@ import java.util.List;
 public class Reimbursement {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reimbId;
 
     @Column(nullable=false)
