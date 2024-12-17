@@ -21,7 +21,7 @@ public class Reimbursement {
     private int amount;
 
     @Column(nullable = false)
-    private String status;
+    private String status = "pending";
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")

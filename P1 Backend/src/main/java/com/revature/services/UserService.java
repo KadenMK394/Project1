@@ -27,12 +27,12 @@ public class UserService {
         //TODO: make sure the userDTO fields are present and valid
         //TODO: make sure the incoming username is unique
         /*TODO: Throw errors if:
-        * First name is blank or null
-        * Last name is blank or null
-        * Username is blank or null
-        * Password is blank or null
-        * Username already exists
-        * */
+         * First name is blank or null
+         * Last name is blank or null
+         * Username is blank or null
+         * Password is blank or null
+         * Username already exists
+         * */
         User user = new User(0, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getPassword(), userDTO.getRole(), null);
 
         //TODO: apply an empty reimbursement list or populate reimbursements (?)
@@ -60,6 +60,24 @@ public class UserService {
     }
 
     //OPTIONAL: Update an employee User's Role to manager
+    public User promoteUser(int userId){
+        //TODO: Make sure the user is not already a manager
+        User user = userDAO.findById(userId).orElseThrow(() -> {
+            return new IllegalArgumentException("No User found with ID " + userId);
+        });
+        user.setRole("manager");
+        return user;
+    }
+
+    //Choice: Demote a manager User's Role to employee
+    public User demoteUser(int userId){
+        //TODO: Make sure the user is not already an employee
+        User user = userDAO.findById(userId).orElseThrow(() -> {
+            return new IllegalArgumentException("No User found with ID " + userId);
+        });
+        user.setRole("employee");
+        return user;
+    }
 
     //Logged out - Verify User (login)
 
