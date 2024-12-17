@@ -36,6 +36,13 @@ public class UserService {
         return userDAO.findAll();
     }
     //Manager - delete a User (and delete their Reimbursements)
+    public User deleteUser(int userId){
+        User user = userDAO.findById(userId).orElseThrow(() -> {
+           return new IllegalArgumentException("No User found with ID " + userId);
+        });
+        userDAO.delete(user);
+        return user;
+    }
 
     //OPTIONAL: Update an employee User's Role to manager
 
