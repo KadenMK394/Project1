@@ -22,23 +22,6 @@ public class UserService {
         this.reimbDAO = reimbDAO;
     }
 
-    //Logged out - Insert a new User (create a new account)
-    public User insertUser(IncomingUserDTO userDTO){
-        //TODO: make sure the userDTO fields are present and valid
-        //TODO: make sure the incoming username is unique
-        /*TODO: Throw errors if:
-         * First name is blank or null
-         * Last name is blank or null
-         * Username is blank or null
-         * Password is blank or null
-         * Username already exists
-         * */
-        User user = new User(0, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getPassword(), userDTO.getRole(), null);
-
-        //TODO: apply an empty reimbursement list or populate reimbursements (?)
-
-        return userDAO.save(user);
-    }
     //Manager - get a list of all Users
     public List<OutgoingUserDTO> getAllUsers(){
         //TODO: Throw an error if there are no records (shouldn't ever happen)
@@ -46,7 +29,7 @@ public class UserService {
         List<User> users = userDAO.findAll();
         for(User user: users){
             //TODO: remember to add reimbursements list to outgoing users
-            outgoingUsers.add(new OutgoingUserDTO(user.getUserId(), user.getFirstName(), user.getLastName(), user.getUserName(), user.getRole()));
+            outgoingUsers.add(new OutgoingUserDTO(user.getUserId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getRole()));
         }
         return outgoingUsers;
     }
@@ -79,9 +62,7 @@ public class UserService {
         return user;
     }
 
-    //Logged out - Verify User (login)
 
-    //OPTIONAL: Logout
 
     //OPTIONAL: "Logging of the Service layer with logback"
     //OPTIONAL: "Test Suites for the Service layer with JUnit"
