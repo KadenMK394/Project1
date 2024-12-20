@@ -1,8 +1,6 @@
 package com.revature.services;
 
-import com.revature.DAOs.ReimbDAO;
 import com.revature.DAOs.UserDAO;
-import com.revature.models.DTOs.IncomingUserDTO;
 import com.revature.models.DTOs.OutgoingUserDTO;
 import com.revature.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +12,12 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserDAO userDAO;
-    private final ReimbDAO reimbDAO;
+    private final ReimbService reimbService;
 
     @Autowired
-    public UserService(UserDAO userDAO, ReimbDAO reimbDAO) {
+    public UserService(UserDAO userDAO, ReimbService reimbService) {
         this.userDAO = userDAO;
-        this.reimbDAO = reimbDAO;
+        this.reimbService = reimbService;
     }
 
     //Manager - get a list of all Users
@@ -38,32 +36,20 @@ public class UserService {
         User user = userDAO.findById(userId).orElseThrow(() -> {
            return new IllegalArgumentException("No User found with ID " + userId);
         });
+        reimbService.deleteAllUserReimbs(userId);
         userDAO.delete(user);
         return user;
     }
 
-    //OPTIONAL: Update an employee User's Role to manager
-    public User promoteUser(int userId){
-        //TODO: Make sure the user is not already a manager
+    //OPTIONAL: Promote or demote a user
+    public User updateUserRole(int userId, String newRole){
         User user = userDAO.findById(userId).orElseThrow(() -> {
             return new IllegalArgumentException("No User found with ID " + userId);
         });
-        user.setRole("manager");
+        user.setRole(newRole);
+        userDAO.save(user);
         return user;
     }
-
-    //Choice: Demote a manager User's Role to employee
-    public User demoteUser(int userId){
-        //TODO: Make sure the user is not already an employee
-        User user = userDAO.findById(userId).orElseThrow(() -> {
-            return new IllegalArgumentException("No User found with ID " + userId);
-        });
-        user.setRole("employee");
-        return user;
-    }
-
-
-
     //OPTIONAL: "Logging of the Service layer with logback"
     //OPTIONAL: "Test Suites for the Service layer with JUnit"
 }

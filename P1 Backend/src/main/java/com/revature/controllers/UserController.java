@@ -1,6 +1,8 @@
 package com.revature.controllers;
 
+import com.revature.annotations.AdminOnly;
 import com.revature.models.DTOs.OutgoingUserDTO;
+import com.revature.models.Reimbursement;
 import com.revature.models.User;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +24,20 @@ public class UserController {
 
     //A method that gets all Users from DB, returning a List of OutgoingUserDTOs
     @GetMapping
+    @AdminOnly
     public ResponseEntity<List<OutgoingUserDTO>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @DeleteMapping
-    public ResponseEntity<User> deleteUser(@RequestBody int userId){
+    @DeleteMapping("/{userId}")
+    @AdminOnly
+    public ResponseEntity<User> deleteUser(@PathVariable int userId){
         return ResponseEntity.ok(userService.deleteUser(userId));
     }
 
-    @PatchMapping("/role/{userId}/promote")
-    public ResponseEntity<User> promoteUser(@PathVariable int userId){
-        return ResponseEntity.accepted().body(userService.promoteUser(userId));
-    }
-
-    @PatchMapping("/role/{userId}/demote")
-    public ResponseEntity<User> demoteUser(@PathVariable int userId){
-        return ResponseEntity.accepted().body(userService.demoteUser(userId));
+    @PatchMapping("/{userId}")
+    @AdminOnly
+    public ResponseEntity<User> updateReimbStatus(@PathVariable int userId, @RequestBody String newRole){
+        return ResponseEntity.accepted().body(userService.updateUserRole(userId, newRole));
     }
 }

@@ -44,9 +44,8 @@ public class ReimbController {
     }
 
     @DeleteMapping("/{userId}/{reimbId}")
-    public ResponseEntity<Integer> deleteReimb(@PathVariable int reimbId){
-        System.out.println("Attempting to delete");
-        return ResponseEntity.accepted().body(reimbService.deleteReimb(reimbId));
+    public ResponseEntity<Reimbursement> deleteReimb(@PathVariable int reimbId, @PathVariable int userId){
+        return ResponseEntity.accepted().body(reimbService.deleteReimb(reimbId, userId));
     }
 
     @GetMapping
@@ -59,5 +58,11 @@ public class ReimbController {
     @AdminOnly
     public ResponseEntity<List<OutgoingReimbDTO>> getAllPending(){
         return ResponseEntity.ok(reimbService.getAllPending());
+    }
+
+    @PatchMapping("/{reimbId}")
+    @AdminOnly
+    public ResponseEntity<Reimbursement> updateReimbStatus(@PathVariable int reimbId, @RequestBody String newStatus){
+        return ResponseEntity.accepted().body(reimbService.updateReimbStatus(reimbId, newStatus));
     }
 }

@@ -15,7 +15,6 @@ public class RoleAspect{
                 .getRequest().getSession().getAttribute("role"))){
 
             throw new IllegalArgumentException("User is not a manager!");
-
         }
     }
 }

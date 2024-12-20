@@ -8,6 +8,7 @@ import com.revature.models.Reimbursement;
 import com.revature.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,29 +78,33 @@ public class ReimbService {
         return reimbDAO.save(reimbursement);
     }
 
-    //TODO: MAKE THIS WORK
     //Own choice: delete a reimbursement
-    public Integer deleteReimb(int reimbId){
+    public Reimbursement deleteReimb(int reimbId, int userId){
+        System.out.println("UserId is " + userId);
         Reimbursement reimbursement = reimbDAO.findById(reimbId).orElseThrow(() -> {
             return new IllegalArgumentException("No Reimbursement found with ID " + reimbId);
         });
+        User user = userDAO.findById(userId).orElseThrow(() -> {
+            return new IllegalArgumentException("No User found with ID " + userId);
+        });
+
+        user.getReimbs().clear();
+        userDAO.save(user);
+
         reimbDAO.delete(reimbursement);
-        return 1;
+        return reimbursement;
     }
 
-    //TODO: This probably won't work either
     //Helper method: delete all reimbursements belonging to a certain user
-    public List<Reimbursement> deleteAllUserReimbs(int userId){
+    public void deleteAllUserReimbs(int userId){
         List<Reimbursement> reimbursements = reimbDAO.findByUser_UserId(userId);
         for(Reimbursement reimb: reimbursements) {
             reimbDAO.delete(reimb);
         }
-        return reimbursements;
     }
 
     //Manager - get a list of all Reimbursements
     public List<OutgoingReimbDTO> getAllReimbs(){
-        System.out.println("I shouldn't be working for an employee!");
         List<OutgoingReimbDTO> outgoingReimbs = new ArrayList<OutgoingReimbDTO>();
         List<Reimbursement> reimbursements = reimbDAO.findAll();
         for(Reimbursement reimb: reimbursements){
@@ -120,4 +125,12 @@ public class ReimbService {
         return pendingReimbs;
     }
 
+    //Manager - approve or deny a Reimbursement
+    public Reimbursement updateReimbStatus(int reimbId, String newStatus){
+        Reimbursement reimbursement = reimbDAO.findById(reimbId).orElseThrow(() -> {
+            return new IllegalArgumentException("No Reimbursement found with ID " + reimbId);
+        });
+        reimbursement.setStatus(newStatus);
+        return reimbDAO.save(reimbursement);
+    }
 }
