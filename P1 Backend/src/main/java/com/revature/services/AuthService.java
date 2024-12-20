@@ -19,18 +19,23 @@ public class AuthService {
 
     //Logged out - Insert a new User (create a new account)
     public User insertUser(IncomingUserDTO userDTO){
-        //TODO: make sure the userDTO fields are present and valid
-        //TODO: make sure the incoming username is unique
-        /*TODO: Throw errors if:
-         * First name is blank or null
-         * Last name is blank or null
-         * Username is blank or null
-         * Password is blank or null
-         * Username already exists
-         * */
-        User user = new User(0, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getPassword(), userDTO.getRole(), null);
+        if(userDTO.getFirstName() == null || userDTO.getFirstName().isBlank()){
+            throw new IllegalArgumentException("Please provide a first name.");
+        }
+        if(userDTO.getLastName() == null || userDTO.getLastName().isBlank()){
+            throw new IllegalArgumentException("Please provide a last name.");
+        }
+        if(userDTO.getUsername() == null || userDTO.getUsername().isBlank()){
+            throw new IllegalArgumentException("Please provide a username.");
+        }
+        //TODO: Throw error if username already in use
+        if(userDTO.getPassword() == null || userDTO.getPassword().isBlank()){
+            throw new IllegalArgumentException("Please provide a password.");
+        }
 
-        //TODO: apply an empty reimbursement list or populate reimbursements (?)
+        User user = new User(0, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getPassword(), userDTO.getRole());
+
+        //TODO: apply an empty reimbursement list (?)
 
         return authDAO.save(user);
     }
@@ -38,6 +43,12 @@ public class AuthService {
     //Logged out - Verify User (login)
     //method that takes in a username/password and returns the matching User if found
     public OutgoingUserDTO login(LoginDTO loginDTO){
+        if(loginDTO.getUsername() == null || loginDTO.getUsername().isBlank()){
+            throw new IllegalArgumentException("Please provide a username.");
+        }
+        if(loginDTO.getPassword() == null || loginDTO.getPassword().isBlank()){
+            throw new IllegalArgumentException("Please provide a password.");
+        }
         //TODO: Validate the loginDTO fields
         //Use the DAO to find a User in the DB with info from the DTO
         User user = authDAO.findByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword());
@@ -47,7 +58,6 @@ public class AuthService {
             //TODO: We could have made a custom "LoginFailedException"
             throw new IllegalArgumentException("No user found with those credentials");
         }
-
         //Return an OutgoingUserDTO to the Controller
         return new OutgoingUserDTO(user.getUserId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getRole());
     }

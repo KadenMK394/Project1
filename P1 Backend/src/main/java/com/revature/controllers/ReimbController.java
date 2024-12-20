@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.annotations.AdminOnly;
 import com.revature.models.DTOs.IncomingReimbDTO;
 import com.revature.models.DTOs.OutgoingReimbDTO;
 import com.revature.models.Reimbursement;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reimbursements")
-@CrossOrigin
+@CrossOrigin(value = "http://localhost:5173", allowCredentials = "true")
 public class ReimbController {
     private final ReimbService reimbService;
 
@@ -21,9 +22,9 @@ public class ReimbController {
         this.reimbService = reimbService;
     }
 
-    @PostMapping
-    public ResponseEntity<Reimbursement> createReimb(@RequestBody IncomingReimbDTO reimbDTO){
-        Reimbursement reimbursement = reimbService.createReimb(reimbDTO);
+    @PostMapping("/{userId}")
+    public ResponseEntity<Reimbursement> createReimb(@PathVariable int userId, @RequestBody IncomingReimbDTO reimbDTO){
+        Reimbursement reimbursement = reimbService.createReimb(reimbDTO, userId);
         return ResponseEntity.status(201).body(reimbursement);
     }
 
@@ -37,17 +38,25 @@ public class ReimbController {
         return ResponseEntity.ok(reimbService.getAllUserPending(userId));
     }
 
-    @PatchMapping("/{reimbId}")
+    @PatchMapping("/{userId}/{reimbId}")
     public ResponseEntity<Reimbursement> updateReimbDesc(@PathVariable int reimbId, @RequestBody String newDesc){
         return ResponseEntity.accepted().body(reimbService.updateReimbDesc(reimbId, newDesc));
     }
 
+    @DeleteMapping("/{userId}/{reimbId}")
+    public ResponseEntity<Integer> deleteReimb(@PathVariable int reimbId){
+        System.out.println("Attempting to delete");
+        return ResponseEntity.accepted().body(reimbService.deleteReimb(reimbId));
+    }
+
     @GetMapping
+    @AdminOnly
     public ResponseEntity<List<OutgoingReimbDTO>> getAllReimbs(){
         return ResponseEntity.ok(reimbService.getAllReimbs());
     }
 
     @GetMapping("/pending")
+    @AdminOnly
     public ResponseEntity<List<OutgoingReimbDTO>> getAllPending(){
         return ResponseEntity.ok(reimbService.getAllPending());
     }

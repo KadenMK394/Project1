@@ -38,14 +38,13 @@ public class User {
     public User() {
     }
 
-    public User(int userId, String firstName, String lastName, String username, String password, String role, List<Reimbursement> reimbs) {
+    public User(int userId, String firstName, String lastName, String username, String password, String role) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.role = role;
-        this.reimbs = reimbs;
     }
 
     public int getUserId() {
@@ -112,8 +111,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", userName='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
-                ", reimbs=" + reimbs +
+                ", role='" + role +
                 '}';
     }
 }

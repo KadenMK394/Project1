@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin
+@CrossOrigin(value = "http://localhost:5173", allowCredentials = "true")
 public class UserController {
     private final UserService userService;
 
@@ -31,12 +31,12 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUser(userId));
     }
 
-    @PatchMapping("/role/{userId}")
+    @PatchMapping("/role/{userId}/promote")
     public ResponseEntity<User> promoteUser(@PathVariable int userId){
         return ResponseEntity.accepted().body(userService.promoteUser(userId));
     }
 
-    @PatchMapping("/role/{userId}")
+    @PatchMapping("/role/{userId}/demote")
     public ResponseEntity<User> demoteUser(@PathVariable int userId){
         return ResponseEntity.accepted().body(userService.demoteUser(userId));
     }

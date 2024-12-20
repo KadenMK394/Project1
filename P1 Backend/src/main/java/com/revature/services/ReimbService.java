@@ -24,12 +24,15 @@ public class ReimbService {
     }
 
     //Insert a new Reimbursement
-    public Reimbursement createReimb(IncomingReimbDTO reimbDTO){
-        /*TODO: Throw errors if:
-         * Any data is blank
-         * */
+    public Reimbursement createReimb(IncomingReimbDTO reimbDTO, int userId){
+        if(reimbDTO.getDescription() == null || reimbDTO.getDescription().isBlank()){
+            throw new IllegalArgumentException("Please provide a description.");
+        }
+        if(reimbDTO.getAmount() <= 0){
+            throw new IllegalArgumentException("Please provide a valid amount.");
+        }
         Reimbursement reimbursement = new Reimbursement(0, reimbDTO.getDescription(), reimbDTO.getAmount(), reimbDTO.getStatus(), null);
-        int userId = reimbDTO.getUserId();
+
         User user = userDAO.findById(userId).orElseThrow(() -> {
            return new IllegalArgumentException("No User found with ID " + userId);
         });
@@ -52,7 +55,7 @@ public class ReimbService {
         List<OutgoingReimbDTO> userPendingReimbs = new ArrayList<OutgoingReimbDTO>();
         List<Reimbursement> reimbursements = reimbDAO.findByUser_UserId(userId);
         for(Reimbursement reimb: reimbursements) {
-            if (reimb.getStatus().equals("Pending")) {
+            if (reimb.getStatus().equals("pending")) {
                 userPendingReimbs.add(new OutgoingReimbDTO(reimb.getReimbId(), reimb.getDescription(), reimb.getAmount(), reimb.getStatus(), reimb.getUser()));
             }
         }
@@ -61,24 +64,30 @@ public class ReimbService {
 
     //OPTIONAL: Update the description of a pending Reimbursement
     public Reimbursement updateReimbDesc(int reimbId, String newDescription){
-        //TODO: error handling to make sure new description is present/valid
-        //TODO: make sure the new description isn't the old description
+        if(newDescription == null || newDescription.isBlank()){
+            throw new IllegalArgumentException("Please provide a description.");
+        }
         Reimbursement reimbursement = reimbDAO.findById(reimbId).orElseThrow(() -> {
             return new IllegalArgumentException("No Reimbursement found with ID " + reimbId);
         });
+        if(reimbursement.getDescription().equals(newDescription)){
+            throw new IllegalArgumentException("Description was not changed.");
+        }
         reimbursement.setDescription(newDescription);
         return reimbDAO.save(reimbursement);
     }
 
+    //TODO: MAKE THIS WORK
     //Own choice: delete a reimbursement
-    public Reimbursement deleteReimb(int reimbId){
+    public Integer deleteReimb(int reimbId){
         Reimbursement reimbursement = reimbDAO.findById(reimbId).orElseThrow(() -> {
             return new IllegalArgumentException("No Reimbursement found with ID " + reimbId);
         });
         reimbDAO.delete(reimbursement);
-        return reimbursement;
+        return 1;
     }
 
+    //TODO: This probably won't work either
     //Helper method: delete all reimbursements belonging to a certain user
     public List<Reimbursement> deleteAllUserReimbs(int userId){
         List<Reimbursement> reimbursements = reimbDAO.findByUser_UserId(userId);
@@ -97,12 +106,13 @@ public class ReimbService {
         }
         return outgoingReimbs;
     }
+
     //Manager - get a list of all Reimbursements that are pending
     public List<OutgoingReimbDTO> getAllPending(){
         List<OutgoingReimbDTO> pendingReimbs = new ArrayList<OutgoingReimbDTO>();
         List<Reimbursement> reimbursements = reimbDAO.findAll();
         for(Reimbursement reimb: reimbursements){
-            if (reimb.getStatus().equals("Pending")) {
+            if (reimb.getStatus().equals("pending")) {
                 pendingReimbs.add(new OutgoingReimbDTO(reimb.getReimbId(), reimb.getDescription(), reimb.getAmount(), reimb.getStatus(), reimb.getUser()));
             }
         }

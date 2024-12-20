@@ -21,10 +21,12 @@ public class AuthAspect {
     }
     @Before("@annotation(AdminOnly)")
     public void checkAdmin(){
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        Object role = attr.getRequest().getSession().getAttribute("role");
-        if (role != "manager"){
+        if(!"manager".equals(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                .getRequest().getSession().getAttribute("role"))){
+
             throw new IllegalArgumentException("User is not a manager!");
+
         }
+
     }
 }

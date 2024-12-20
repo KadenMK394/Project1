@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin
+@CrossOrigin(value = "http://localhost:5173", allowCredentials = "true")
 public class AuthController {
     private final AuthService authService;
 
@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     //A method that inserts a new User into the DB
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<User> insertUser(@RequestBody IncomingUserDTO userDTO){
         User user = authService.insertUser(userDTO);
         return ResponseEntity.status(201).body(user);
