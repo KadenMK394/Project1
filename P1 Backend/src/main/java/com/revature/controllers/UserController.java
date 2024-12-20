@@ -30,4 +30,14 @@ public class UserController {
     public ResponseEntity<User> deleteUser(@RequestBody int userId){
         return ResponseEntity.ok(userService.deleteUser(userId));
     }
+
+    @PatchMapping("/role/{userId}")
+    public ResponseEntity<User> promoteUser(@PathVariable int userId){
+        return ResponseEntity.accepted().body(userService.promoteUser(userId));
+    }
+
+    @PatchMapping("/role/{userId}")
+    public ResponseEntity<User> demoteUser(@PathVariable int userId){
+        return ResponseEntity.accepted().body(userService.demoteUser(userId));
+    }
 }

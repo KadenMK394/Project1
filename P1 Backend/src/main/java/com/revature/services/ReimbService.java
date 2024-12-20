@@ -24,7 +24,7 @@ public class ReimbService {
     }
 
     //Insert a new Reimbursement
-    public Reimbursement insertReimbursement(IncomingReimbDTO reimbDTO){
+    public Reimbursement createReimb(IncomingReimbDTO reimbDTO){
         /*TODO: Throw errors if:
          * Any data is blank
          * */
