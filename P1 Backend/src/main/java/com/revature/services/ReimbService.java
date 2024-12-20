@@ -99,6 +99,7 @@ public class ReimbService {
 
     //Manager - get a list of all Reimbursements
     public List<OutgoingReimbDTO> getAllReimbs(){
+        System.out.println("I shouldn't be working for an employee!");
         List<OutgoingReimbDTO> outgoingReimbs = new ArrayList<OutgoingReimbDTO>();
         List<Reimbursement> reimbursements = reimbDAO.findAll();
         for(Reimbursement reimb: reimbursements){

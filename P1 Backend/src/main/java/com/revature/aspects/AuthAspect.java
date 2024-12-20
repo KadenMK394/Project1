@@ -19,14 +19,7 @@ public class AuthAspect {
             throw new IllegalArgumentException("User is not logged in");
         }
     }
-    @Before("@annotation(AdminOnly)")
-    public void checkAdmin(){
-        if(!"manager".equals(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-                .getRequest().getSession().getAttribute("role"))){
 
-            throw new IllegalArgumentException("User is not a manager!");
-
-        }
-
-    }
 }
+
+
