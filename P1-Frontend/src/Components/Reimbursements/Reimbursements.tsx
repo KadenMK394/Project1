@@ -1,64 +1,51 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
 import { Button, Container, Table } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { Navbar } from "../Navbar/Navbar"
+import { store } from "../../GlobalData/store"
+import { ReimbursementInterface } from "../../Interfaces/ReimbursementInterface"
 
-interface Reimbursement {
-    reimbId:number,
-    description:string,
-    amount:number,
-    user:any
-}
-
-export const Reimbursements:React.FC = () => {
-    const [reimbs, setReimbs] = useState<Reimbursement[]>([])
-
+export const Reimbursements:React.FC<any> = ({reimbs}) => {
     const navigate = useNavigate()
-
-    useEffect(() => {
-        getAllReimbs()
-    }, [])
-
-    const getAllReimbs = async () => {
-        const response = await axios.get("http://localhost:5555/reimbursements", {withCredentials:true})
-        setReimbs(response.data)
-    }
-
-    const getUserReimbs = async (reimbId:number) => {
-        const response = await axios.get("http://localhost:5555/reimbursements/" + reimbId, {withCredentials:true})
-        setReimbs(response.data)
-    }
     
+    const searchParams = useSearchParams()
+    
+
     return(
         <Container>
-            <Button className="btn-info" onClick={()=>{navigate("/")}}>Back</Button>
-            <h3>Reimbursements:</h3>
-            
-            <Table>
-                <thead>
-                    <tr>
-                        <th>Reimbursement ID</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                        <th>User</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {reimbs.map((reimb:Reimbursement) => (
+            <Navbar/>
+            <Container>
+                <Button className="btn-info" onClick={()=>{navigate("/dashboard")}}>Back</Button>
+                <h3>
+                    {store.loggedInUser.role === "Manager" ? "All Reimbursements" : "My Reimbursements"}
+                </h3>
+                
+                <Table className="table-success table-hover table-responsive">
+                    <thead>
                         <tr>
-                            <td>{reimb.reimbId}</td>
-                            <td>{reimb.description}</td>
-                            <td>{reimb.amount}</td>
-                            <td>{reimb.user.username}</td>
-                            <td>
-
-                            </td>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>User</th>
+                            <th>Options</th>
                         </tr>
-                    ))}
-                </tbody>
+                    </thead>
+                    <tbody>
+                        {reimbs.map((reimb:ReimbursementInterface) => (
+                            <tr>
+                                <td className="align-middle">{reimb.amount}</td>
+                                <td className="align-middle">{reimb.description}</td>
+                                <td className="align-middle">{reimb.user.username}</td>
+                                <td>
+                                    {store.loggedInUser.userId != reimb.user.userId ? <td className="d-flex gap-2">
+                                        <Button className="btn-success">Approve</Button>
+                                        <Button className="btn-danger">Deny</Button>
+                                    </td> : <td><Button>Modify</Button></td>}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
 
-            </Table>
+                </Table>
+            </Container>
         </Container>
     )
 }

@@ -3,23 +3,16 @@ import { useEffect, useState } from "react"
 import { Button, Container, Table } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import { store } from "../../GlobalData/store"
-
-interface User{
-    userId:number,
-    firstName:string,
-    lastName:string,
-    username:string,
-    role:string,
-    reimbs:any
-}
+import { Navbar } from "../Navbar/Navbar"
+import { UserInterface } from "../../Interfaces/UserInterface"
 
 export const Users:React.FC = () => {
 
-    const [users, setUsers] = useState<User[]>([])
+    const [users, setUsers] = useState<UserInterface[]>([])
 
     useEffect(() => {
         if(store.loggedInUser.role != "Manager"){
-            navigate("/employee")
+            navigate("/dashboard")
         }
         getAllUsers()
     }, [])
@@ -36,37 +29,37 @@ export const Users:React.FC = () => {
 
     return(
         <Container>
-            <Button className="btn-info" onClick={() => navigate("/")}>Back</Button>
+            <Navbar/>
+            <Container>
+                <Button className="btn-info" onClick={() => navigate("/dashboard")}>Back</Button>
 
-            <Table className="table-success table-hover">
-                <thead>
-                    <tr>
-                        <th>User Id</th>
-                        <th>Full Name</th>
-                        <th>Username</th>
-                        <th>Role</th>
-                        <th>Pending Reimbursements</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {/* map() for users gathered from the GET request */}
-                {users.map((user:User) => (
+                <Table className="table-success table-hover table-responsive">
+                    <thead>
                         <tr>
-                            <td>{user.userId}</td>
-                            <td>{user.firstName} {user.lastName}</td>
-                            <td>{user.username}</td>
-                            <td>{user.role}</td>
-                            <td>{user.reimbs}</td>
-                            <td>
-                                <Button className="btn-danger">Delete</Button>
-                                {user.role === "Employee" ? <Button className="btn-verify">Promote</Button> : <Button className="button-warning">Demote</Button>}
-                            </td>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Pending Reimbursements</th>
+                            <th>Options</th>
                         </tr>
-                    ))}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                    {users.map((user:UserInterface) => (
+                            <tr>
+                                <td className="align-middle">{user.firstName} {user.lastName}</td>
+                                <td className="align-middle">{user.username}</td>
+                                <td className="align-middle">{user.role}</td>
+                                <td className="align-middle">{user.reimbs}</td>
+                                {store.loggedInUser.userId != user.userId ? <td className="d-flex gap-2">
+                                    {user.role === "Employee" ? <Button className="btn-success">Promote</Button> : <Button className="btn-warning">Demote</Button>}
+                                    <Button className="btn-danger">Delete</Button>
+                                </td> : <td></td>}
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
 
+            </Container>
         </Container>
     )
 }

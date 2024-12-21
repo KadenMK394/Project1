@@ -25,13 +25,7 @@ export const Login:React.FC = () => {
             (response) => {
                 store.loggedInUser = response.data
 
-                if(response.data.role === "employee"){
-                    //TODO: Employee dashboard
-                    navigate("/")
-                } else {
-                    //TODO: Manager dashboard
-                    navigate("/users")
-                }
+                navigate("/dashboard")
             }
         )
         .catch((error) => {

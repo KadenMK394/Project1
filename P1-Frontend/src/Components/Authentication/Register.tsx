@@ -25,16 +25,12 @@ export const Register:React.FC = () => {
         await axios.post("http://localhost:5555/auth/register", newUser, {withCredentials:true})
         .then((response) => {
             store.loggedInUser = response.data
-                if(response.data.role === "employee"){
-                    //TODO: Employee dashboard
-                    //navigate("/home")
-                } else {
-                    //TODO: Manager dashboard
-                    navigate("/")
-                }
+                
+            navigate("/dashboard")
         })
         .catch((error) => {
             console.log(error)
+            alert(error.response.data)
         })
     }
 
