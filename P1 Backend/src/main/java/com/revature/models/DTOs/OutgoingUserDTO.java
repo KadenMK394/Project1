@@ -5,7 +5,7 @@ public class OutgoingUserDTO {
     private String firstName;
     private String lastName;
     private String username;
-    private String role = "employee";
+    private String role = "Employee";
 
     //boilerplate-----------------------
     public OutgoingUserDTO() {

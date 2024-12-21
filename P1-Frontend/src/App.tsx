@@ -3,6 +3,10 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import { Reimbursements } from './Components/Reimbursements/Reimbursements'
 import { Users } from './Components/Users/Users'
+import { Login } from './Components/Authentication/Login'
+import { Register } from './Components/Authentication/Register'
+import { Employee } from './Components/Users/Employee'
+import { Manager } from './Components/Users/Manager'
 
 function App() {
 
@@ -10,9 +14,12 @@ function App() {
     <>
      <BrowserRouter>
         <Routes>
-          {/* Empty string or / for path to render a component at startup */}
-          <Route path="/reimbursements" element={<Reimbursements/>}/>
-          <Route path="/users" element={<Users/>}/>
+          <Route path="reimbursements" element={<Reimbursements/>}/>
+          <Route path="users" element={<Users/>}/>
+          <Route path="" element={<Login/>}/>
+          <Route path="register" element={<Register/>}/>
+          <Route path="employee" element={<Employee/>}/>
+          <Route path="manager" element={<Manager/>}/>
         </Routes>
       </BrowserRouter>
     </>

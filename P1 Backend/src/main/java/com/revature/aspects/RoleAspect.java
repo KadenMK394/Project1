@@ -11,7 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class RoleAspect{
     @Before("@annotation(com.revature.annotations.AdminOnly)")
     public void checkAdmin(){
-        if(!"manager".equals(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+        if(!"Manager".equals(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest().getSession().getAttribute("role"))){
 
             throw new IllegalArgumentException("User is not a manager!");

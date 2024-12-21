@@ -6,7 +6,7 @@ public class OutgoingReimbDTO {
     private int reimbId;
     private String description;
     private int amount;
-    private String status = "pending";
+    private String status = "Pending";
     private User user;
 
     //boilerplate-----------------------

@@ -2,12 +2,15 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Button, Container, Table } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
+import { store } from "../../GlobalData/store"
 
 interface User{
     userId:number,
+    firstName:string,
+    lastName:string,
     username:string,
     role:string,
-    teamId:number
+    reimbs:any
 }
 
 export const Users:React.FC = () => {
@@ -15,15 +18,19 @@ export const Users:React.FC = () => {
     const [users, setUsers] = useState<User[]>([])
 
     useEffect(() => {
+        if(store.loggedInUser.role != "Manager"){
+            navigate("/employee")
+        }
         getAllUsers()
     }, [])
 
     const navigate = useNavigate()
 
     const getAllUsers = async () => {
-        const response = await axios.get("http://localhost:4444/users")
+        await axios.get("http://localhost:5555/users", {withCredentials:true})
         .then((response) =>{
             setUsers(response.data)
+            console.log(response.data)
         })
     }
 
@@ -35,9 +42,10 @@ export const Users:React.FC = () => {
                 <thead>
                     <tr>
                         <th>User Id</th>
+                        <th>Full Name</th>
                         <th>Username</th>
                         <th>Role</th>
-                        <th>Team Name</th>
+                        <th>Pending Reimbursements</th>
                         <th>Options</th>
                     </tr>
                 </thead>
@@ -46,12 +54,13 @@ export const Users:React.FC = () => {
                 {users.map((user:User) => (
                         <tr>
                             <td>{user.userId}</td>
+                            <td>{user.firstName} {user.lastName}</td>
                             <td>{user.username}</td>
                             <td>{user.role}</td>
-                            <td>{user.teamId}</td>
+                            <td>{user.reimbs}</td>
                             <td>
                                 <Button className="btn-danger">Delete</Button>
-                                <Button className="btn-verify">Promote</Button>
+                                {user.role === "Employee" ? <Button className="btn-verify">Promote</Button> : <Button className="button-warning">Demote</Button>}
                             </td>
                         </tr>
                     ))}

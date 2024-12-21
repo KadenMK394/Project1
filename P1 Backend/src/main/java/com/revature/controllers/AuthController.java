@@ -23,8 +23,16 @@ public class AuthController {
 
     //A method that inserts a new User into the DB
     @PostMapping("/register")
-    public ResponseEntity<User> insertUser(@RequestBody IncomingUserDTO userDTO){
+    public ResponseEntity<User> insertUser(@RequestBody IncomingUserDTO userDTO, HttpSession session){
+        userDTO.setRole("Employee");
         User user = authService.insertUser(userDTO);
+        session.setAttribute("userId", user.getUserId());
+        session.setAttribute("firstName", user.getFirstName());
+        session.setAttribute("lastName", user.getLastName());
+        session.setAttribute("username", user.getUsername());
+        session.setAttribute("role", user.getRole());
+
+        System.out.println("User " + session.getAttribute("username") + " registered!");
         return ResponseEntity.status(201).body(user);
     }
 
@@ -33,8 +41,8 @@ public class AuthController {
         OutgoingUserDTO user = authService.login(loginDTO);
 
         session.setAttribute("userId", user.getUserId());
-        session.setAttribute("username", user.getFirstName());
-        session.setAttribute("username", user.getLastName());
+        session.setAttribute("firstName", user.getFirstName());
+        session.setAttribute("lastName", user.getLastName());
         session.setAttribute("username", user.getUsername());
         session.setAttribute("role", user.getRole());
 

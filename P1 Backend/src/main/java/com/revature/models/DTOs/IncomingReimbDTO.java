@@ -3,7 +3,7 @@ package com.revature.models.DTOs;
 public class IncomingReimbDTO {
     private String description;
     private int amount;
-    private String status = "pending";
+    private String status = "Pending";
     private int userId;
 
     //boilerplate-----------------------
