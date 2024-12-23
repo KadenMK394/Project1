@@ -115,14 +115,14 @@ export const UserReimbs:React.FC = () => {
         <Container>
             <Navbar/>
             <h3>My Reimbursements</h3>
-            <FormSelect name="display" id="displayDropdown" onChange={handleChange}>
+            <FormSelect name="display" id="displayDropdown" onChange={handleChange} className="dropdown">
                 <option value="All">All</option>
                 <option value="Pending">Pending</option>
                 <option value="Accepted" disabled>All (Not Implemented)</option>
                 <option value="Denied" disabled>Denied (Not Implemented)</option>
             </FormSelect>
-            <Table className="table-success table-hover table-responsive">
-                <thead>
+            <Table className="table-light table-striped-columns table-bordered table-hover table-responsive">
+                <thead className="table-dark">
                     <tr>
                         <th>Amount</th>
                         <th>Description</th>
@@ -133,13 +133,13 @@ export const UserReimbs:React.FC = () => {
                 <tbody>
                 {reimbs.map((reimb:ReimbursementInterface) => (
                         <tr>
-                            <td className="align-middle">{reimb.amount}</td>
+                            <td className="align-middle">${reimb.amount}</td>
                             {descState === reimb.reimbId ? <td className="align-middle"><Form.Control className="text" type="text" defaultValue={reimb.description} onChange={handleChange}/></td> : <td className="align-middle">{reimb.description}</td>}
                             <td className="align-middle">{reimb.status}</td>
                             
-                            {descState === reimb.reimbId ? <td><Button onClick={saveModify}>Save</Button> <Button className="btn-warning" onClick={cancelModify}>Cancel</Button></td> :
-                            reimbState === reimb.reimbId ? <td><p>Are you sure?</p> <Button className="btn-danger" onClick={deleteReimb}>Yes</Button> <Button className="btn-success" onClick={cancelDelete}>No</Button></td> :
-                            reimb.status === "Pending" ? <td><Button onClick={() => modify(reimb.reimbId)}>Modify</Button> <Button className="btn-danger" onClick={() => deleteAsk(reimb.reimbId)}>Delete</Button></td> : <td></td>}
+                            {descState === reimb.reimbId ? <td className="d-flex"><Button className="first-btn" onClick={saveModify}>Save</Button> <Button className="btn-warning second-btn" onClick={cancelModify}>Cancel</Button></td> :
+                            reimbState === reimb.reimbId ? <td className="d-flex"><p>Are you sure?</p> <Button className="btn-danger" onClick={deleteReimb}>Yes</Button> <Button className="btn-success" onClick={cancelDelete}>No</Button></td> :
+                            reimb.status === "Pending" ? <td className="d-flex"><Button className="first-btn" onClick={() => modify(reimb.reimbId)}>Modify</Button> <Button className="btn-danger second-btn" onClick={() => deleteAsk(reimb.reimbId)}>Delete</Button></td> : <td className="d-flex">------</td>}
                         </tr>
                     ))}
                 </tbody>

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { store } from "../../GlobalData/store"
 import { Navbar } from "../Navbar/Navbar"
 import { UserInterface } from "../../Interfaces/UserInterface"
+import './Users.css'
 
 export const Users:React.FC = () => {
 
@@ -74,8 +75,8 @@ export const Users:React.FC = () => {
         <Container>
             <Navbar/>
             <Container>
-                <Table className="table-success table-hover table-responsive">
-                    <thead>
+                <Table className="table-light table-striped-columns table-bordered table-hover table-responsive">
+                <thead className="table-dark">
                         <tr>
                             <th>Full Name</th>
                             <th>Username</th>
@@ -89,14 +90,14 @@ export const Users:React.FC = () => {
                                 <td className="align-middle">{user.firstName} {user.lastName}</td>
                                 <td className="align-middle">{user.username}</td>
                                 <td className="align-middle">{user.role}</td>
-                                {store.loggedInUser.userId != user.userId ? <td className="d-flex gap-2">
+                                {store.loggedInUser.userId != user.userId ? <td className="d-flex">
                                     {userState === user.userId ? 
                                     <><p>Are you sure?</p>
-                                    <Button className="btn-danger" onClick={deleteUser}>Yes</Button>
-                                    <Button className="btn-success" onClick={cancelDelete}>No</Button></> :
-                                    <>{user.role === "Employee" ? <Button className="btn-success" onClick={() => promoteUser(user.userId)}>Promote</Button> : <Button className="btn-warning" onClick={() => demoteUser(user.userId)}>Demote</Button>}
-                                    <Button className="btn-danger" onClick={() => deleteAsk(user.userId)}>Delete</Button></> }  
-                                </td> : <td></td>}
+                                    <Button className="btn-danger first-btn" onClick={deleteUser}>Yes</Button>
+                                    <Button className="btn-success second-btn" onClick={cancelDelete}>No</Button></> :
+                                    <>{user.role === "Employee" ? <Button className="btn-success first-btn" onClick={() => promoteUser(user.userId)}>Promote</Button> : <Button className="btn-warning first-btn" onClick={() => demoteUser(user.userId)}>Demote</Button>}
+                                    <Button className="btn-danger second-btn" onClick={() => deleteAsk(user.userId)}>Delete</Button></> }  
+                                </td> : <td className="d-flex">------</td>}
                             </tr>
                         ))}
                     </tbody>

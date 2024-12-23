@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { store } from "../../GlobalData/store"
 import { Button, Container, Form } from "react-bootstrap"
+import './Auth.css'
 
 export const Register:React.FC = () => {
 
@@ -35,7 +36,7 @@ export const Register:React.FC = () => {
     }
 
     return(
-        <Container className="d-flex align-items-center flex-column mt-5">
+        <Container className="d-flex align-items-center flex-column mt-5 regRec">
             <h3>Register</h3>
 
             <div className="mt-1">

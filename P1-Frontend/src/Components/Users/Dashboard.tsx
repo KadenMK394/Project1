@@ -23,7 +23,8 @@ export const Dashboard:React.FC = () => {
                 <h2>
                     {store.loggedInUser.role === "Manager" ? "Manager Dashboard" : "Employee Dashboard"}
                 </h2>
-                <div className="d-flex mt-3">
+                <h3 className="d-flex mt-5">Welcome, {store.loggedInUser.firstName}!</h3>
+                <div className="d-flex mt-5">
                     <Button className="btn-success" onClick={() => navigate("/reimbursements/" + store.loggedInUser.userId)}>My Reimbursements</Button>
                 </div>
                 

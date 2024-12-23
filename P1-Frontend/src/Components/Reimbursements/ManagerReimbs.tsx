@@ -74,14 +74,14 @@ export const ManagerReimbs:React.FC = () => {
         <Container>
             <Navbar/>
             <h3>All Reimbursements</h3>
-            <FormSelect name="display" id="displayDropdown" onChange={handleChange}>
+            <FormSelect name="display" id="displayDropdown" onChange={handleChange} className="dropdown">
                 <option value="All">All</option>
                 <option value="Pending">Pending</option>
                 <option value="Accepted" disabled>All (Not Implemented)</option>
                 <option value="Denied" disabled>Denied (Not Implemented)</option>
             </FormSelect>
-            <Table className="table-success table-hover table-responsive">
-                <thead>
+            <Table className="table-light table-striped-columns table-bordered table-hover table-responsive">
+                <thead className="table-dark">
                     <tr>
                         <th>Amount</th>
                         <th>Description</th>
@@ -93,13 +93,13 @@ export const ManagerReimbs:React.FC = () => {
                 <tbody>
                     {reimbs.map((reimb:ReimbursementInterface) => (
                         <tr>
-                            <td className="align-middle">{reimb.amount}</td>
+                            <td className="align-middle">${reimb.amount}</td>
                             <td className="align-middle">{reimb.description}</td>
                             <td className="align-middle">{reimb.user.username}</td>
                             <td className="align-middle">{reimb.status}</td>
                             
                             {/*Very complicated way to handle all of the option buttons */}
-                            {store.loggedInUser.userId != reimb.user.userId && reimb.status === "Pending" ? <td className="d-flex gap-2"><Button className="btn-success" onClick={() => approve(reimb.reimbId)}>Approve</Button> <Button className="btn-danger" onClick={() => deny(reimb.reimbId)}>Deny</Button></td> : <td></td>}
+                            {store.loggedInUser.userId != reimb.user.userId && reimb.status === "Pending" ? <td className="d-flex"><Button className="btn-success first-btn" onClick={() => approve(reimb.reimbId)}>Approve</Button> <Button className="btn-danger second-btn" onClick={() => deny(reimb.reimbId)}>Deny</Button></td> : <td className="d-flex">------</td>}
                         </tr>
                     ))}
                 </tbody>
