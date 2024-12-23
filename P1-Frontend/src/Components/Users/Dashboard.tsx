@@ -9,10 +9,9 @@ import { Navbar } from "../Navbar/Navbar"
 export const Dashboard:React.FC = () => {
 
     useEffect(() => {
-        if(store.loggedInUser.role != "Manager" && store.loggedInUser.role != "Employee"){
+        if(store.loggedInUser.role.length <= 0){
             navigate("/")
         }
-        
     }, [])
 
     const navigate = useNavigate()

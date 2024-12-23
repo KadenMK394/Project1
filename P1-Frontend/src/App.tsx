@@ -7,6 +7,7 @@ import { Register } from './Components/Authentication/Register'
 import { Dashboard } from './Components/Users/Dashboard'
 import { ManagerReimbs } from './Components/Reimbursements/ManagerReimbs'
 import { UserReimbs } from './Components/Reimbursements/UserReimbs'
+import { NewReimbs } from './Components/Reimbursements/NewReimbs'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="" element={<Login/>}/>
           <Route path="register" element={<Register/>}/>
           <Route path="dashboard" element={<Dashboard/>}/>
+          <Route path="reimbursements/new/:userId" element={<NewReimbs/>}/>
         </Routes>
       </BrowserRouter>
     </>

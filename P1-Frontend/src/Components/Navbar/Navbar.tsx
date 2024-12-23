@@ -1,10 +1,10 @@
 import { Button, Nav } from "react-bootstrap"
 import './Navbar.css'
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { store } from "../../GlobalData/store"
 
 export const Navbar:React.FC = () => {
-
+    const location = useLocation()
     const navigate = useNavigate()
 
     const logout = () => {
@@ -21,7 +21,8 @@ export const Navbar:React.FC = () => {
     return(
         <>
             <Nav className="navbar bg-light">
-                <Button className="btn-danger nav-item" onClick={logout}>Log Out</Button>
+                {location.pathname != "/dashboard" ? <Button className="nav-item nav-right" onClick={() => navigate(-1)}>Back</Button> : ""}
+                <Button className="btn-danger nav-item nav-left" onClick={logout}>Log Out</Button>
             </Nav>
         </>
     )

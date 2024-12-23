@@ -9,6 +9,7 @@ import { UserInterface } from "../../Interfaces/UserInterface"
 export const Users:React.FC = () => {
 
     const [users, setUsers] = useState<UserInterface[]>([])
+    const [userState, setUserState] = useState<number>()
 
     useEffect(() => {
         if(store.loggedInUser.role != "Manager"){
@@ -23,7 +24,49 @@ export const Users:React.FC = () => {
         await axios.get("http://localhost:5555/users", {withCredentials:true})
         .then((response) =>{
             setUsers(response.data)
-            console.log(response.data)
+            setUserState(0)
+        })
+    }
+
+    const deleteAsk = (userId:number) => {
+        setUserState(userId)
+    }
+
+    const deleteUser = async () => {
+        await axios.delete("http://localhost:5555/users/" + userState, {withCredentials:true})
+        .then(() => {
+            setUserState(0)
+            getAllUsers()
+        })
+        .catch((error) => {
+            console.log(error)
+            alert(error.response.data)
+        })
+    }
+
+    const cancelDelete = () => {
+        setUserState(0)
+    }
+
+    const promoteUser = async (userId:number) => {
+        await axios.patch("http://localhost:5555/users/" + userId, "Manager", {withCredentials:true, headers:{'Content-Type':'text/plain',},})
+        .then(() => {
+            getAllUsers()
+        })
+        .catch((error) => {
+            console.log(error)
+            alert(error.response.data)
+        })
+    }
+
+    const demoteUser = async (userId:number) => {
+        await axios.patch("http://localhost:5555/users/" + userId, "Employee", {withCredentials:true, headers:{'Content-Type':'text/plain',},})
+        .then(() => {
+            getAllUsers()
+        })
+        .catch((error) => {
+            console.log(error)
+            alert(error.response.data)
         })
     }
 
@@ -31,15 +74,12 @@ export const Users:React.FC = () => {
         <Container>
             <Navbar/>
             <Container>
-                <Button className="btn-info" onClick={() => navigate("/dashboard")}>Back</Button>
-
                 <Table className="table-success table-hover table-responsive">
                     <thead>
                         <tr>
                             <th>Full Name</th>
                             <th>Username</th>
                             <th>Role</th>
-                            <th>Pending Reimbursements</th>
                             <th>Options</th>
                         </tr>
                     </thead>
@@ -49,10 +89,13 @@ export const Users:React.FC = () => {
                                 <td className="align-middle">{user.firstName} {user.lastName}</td>
                                 <td className="align-middle">{user.username}</td>
                                 <td className="align-middle">{user.role}</td>
-                                <td className="align-middle">{user.reimbs}</td>
                                 {store.loggedInUser.userId != user.userId ? <td className="d-flex gap-2">
-                                    {user.role === "Employee" ? <Button className="btn-success">Promote</Button> : <Button className="btn-warning">Demote</Button>}
-                                    <Button className="btn-danger">Delete</Button>
+                                    {userState === user.userId ? 
+                                    <><p>Are you sure?</p>
+                                    <Button className="btn-danger" onClick={deleteUser}>Yes</Button>
+                                    <Button className="btn-success" onClick={cancelDelete}>No</Button></> :
+                                    <>{user.role === "Employee" ? <Button className="btn-success" onClick={() => promoteUser(user.userId)}>Promote</Button> : <Button className="btn-warning" onClick={() => demoteUser(user.userId)}>Demote</Button>}
+                                    <Button className="btn-danger" onClick={() => deleteAsk(user.userId)}>Delete</Button></> }  
                                 </td> : <td></td>}
                             </tr>
                         ))}

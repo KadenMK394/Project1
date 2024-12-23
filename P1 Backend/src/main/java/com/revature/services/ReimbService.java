@@ -53,10 +53,11 @@ public class ReimbService {
 
     //Get a list of Reimbursements for a specific User that are pending
     public List<OutgoingReimbDTO> getAllUserPending(int userId){
+        System.out.println("Hello??");
         List<OutgoingReimbDTO> userPendingReimbs = new ArrayList<OutgoingReimbDTO>();
         List<Reimbursement> reimbursements = reimbDAO.findByUser_UserId(userId);
         for(Reimbursement reimb: reimbursements) {
-            if (reimb.getStatus().equals("pending")) {
+            if (reimb.getStatus().equals("Pending")) {
                 userPendingReimbs.add(new OutgoingReimbDTO(reimb.getReimbId(), reimb.getDescription(), reimb.getAmount(), reimb.getStatus(), reimb.getUser()));
             }
         }
@@ -115,10 +116,11 @@ public class ReimbService {
 
     //Manager - get a list of all Reimbursements that are pending
     public List<OutgoingReimbDTO> getAllPending(){
+        System.out.println("Hello!!");
         List<OutgoingReimbDTO> pendingReimbs = new ArrayList<OutgoingReimbDTO>();
         List<Reimbursement> reimbursements = reimbDAO.findAll();
         for(Reimbursement reimb: reimbursements){
-            if (reimb.getStatus().equals("pending")) {
+            if (reimb.getStatus().equals("Pending")) {
                 pendingReimbs.add(new OutgoingReimbDTO(reimb.getReimbId(), reimb.getDescription(), reimb.getAmount(), reimb.getStatus(), reimb.getUser()));
             }
         }
